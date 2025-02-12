@@ -9,8 +9,8 @@ public interface CourseDAO {
     CourseImpl saveCourse(CourseImpl course);
     
     CourseImpl findById(int id);
-    List<CourseImpl> findByName(String name);
-    List<CourseImpl> findByDate(LocalDate date);
-    List<CourseImpl> findAll();
+    Collection<CourseImpl> findByName(String name);
+    Collection<CourseImpl> findByDate(LocalDate date);
+    Collection<CourseImpl> findAll();
     boolean removeCourse(CourseImpl course);
 }

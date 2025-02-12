@@ -4,12 +4,12 @@ import org.example.data_access.CourseDAO;
 import org.example.model.CourseImpl;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class CourseDAOList implements CourseDAO {
+public class CourseDAOSet implements CourseDAO {
     private static Set<CourseImpl> courses = new HashSet<>();
 
     @Override
@@ -46,21 +46,21 @@ public class CourseDAOList implements CourseDAO {
     }
 
     @Override
-    public List<CourseImpl> findByName(String name) {
+    public Collection<CourseImpl> findByName(String name) {
         return courses.stream()
                 .filter(c -> Objects.equals(c.getCourseName(), name))
                 .toList();
     }
 
     @Override
-    public List<CourseImpl> findByDate(LocalDate date) {
+    public Collection<CourseImpl> findByDate(LocalDate date) {
         return courses.stream()
                 .filter(c -> c.getStartDate() == date)
                 .toList();
     }
 
     @Override
-    public List<CourseImpl> findAll() {
+    public Collection<CourseImpl> findAll() {
         return Set.copyOf(courses);
     }
 
