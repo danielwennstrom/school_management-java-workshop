@@ -5,11 +5,12 @@ import org.example.model.CourseImpl;
 import org.example.model.LectureImpl;
 import org.example.model.TeacherImpl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LectureDAOList implements LectureDAO {
+public class LectureDAOSet implements LectureDAO {
     private static Set<LectureImpl> lectures = new HashSet<>();
 
     @Override
@@ -23,17 +24,17 @@ public class LectureDAOList implements LectureDAO {
     }
 
     @Override
-    public List<LectureImpl> findByTeacher(TeacherImpl teacher) {
+    public Collection<LectureImpl> findByTeacher(TeacherImpl teacher) {
         return List.of();
     }
 
     @Override
-    public List<LectureImpl> findByCourse(CourseImpl course) {
+    public Collection<LectureImpl> findByCourse(CourseImpl course) {
         return List.of();
     }
 
     @Override
-    public List<LectureImpl> findAll() {
+    public Collection<LectureImpl> findAll() {
         return List.of();
     }
 

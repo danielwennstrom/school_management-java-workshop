@@ -7,8 +7,8 @@ import java.util.*;
 public interface StudentDAO {
     StudentImpl saveStudent(StudentImpl student);
     StudentImpl findByEmail(String email);
-    List<StudentImpl> findByName(String name);
     StudentImpl findById(int id);
-    List<StudentImpl> findAll();
+    Collection<StudentImpl> findByName(String name);
+    Collection<StudentImpl> findAll();
     boolean deleteStudent(StudentImpl student);
 }

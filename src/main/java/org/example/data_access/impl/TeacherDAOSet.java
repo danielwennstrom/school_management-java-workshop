@@ -4,11 +4,12 @@ import org.example.data_access.TeacherDAO;
 import org.example.model.CourseImpl;
 import org.example.model.TeacherImpl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TeacherDAOList implements TeacherDAO {
+public class TeacherDAOSet implements TeacherDAO {
     private static Set<TeacherImpl> teachers = new HashSet<>();
 
     @Override
@@ -27,12 +28,12 @@ public class TeacherDAOList implements TeacherDAO {
     }
 
     @Override
-    public List<TeacherImpl> findByName(String name) {
+    public Collection<TeacherImpl> findByName(String name) {
         return List.of();
     }
 
     @Override
-    public List<TeacherImpl> findByCourse(CourseImpl course) {
+    public Collection<TeacherImpl> findByCourse(CourseImpl course) {
         return List.of();
     }
 

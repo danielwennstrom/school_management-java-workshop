@@ -4,13 +4,13 @@ import org.example.model.CourseImpl;
 import org.example.model.LectureImpl;
 import org.example.model.TeacherImpl;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface LectureDAO {
     LectureImpl saveLecture(LectureImpl lecture);
     LectureImpl findById(int id);
-    List<LectureImpl> findByTeacher(TeacherImpl teacher);
-    List<LectureImpl> findByCourse(CourseImpl course);
-    List<LectureImpl> findAll();
+    Collection<LectureImpl> findByTeacher(TeacherImpl teacher);
+    Collection<LectureImpl> findByCourse(CourseImpl course);
+    Collection<LectureImpl> findAll();
     boolean deleteLecture(LectureImpl lecture);
 }

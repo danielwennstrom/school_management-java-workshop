@@ -3,11 +3,12 @@ package org.example.data_access.impl;
 import org.example.data_access.StudentDAO;
 import org.example.model.StudentImpl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class StudentDAOList implements StudentDAO {
+public class StudentDAOSet implements StudentDAO {
     private static Set<StudentImpl> students = new HashSet<>();
 
     @Override
@@ -21,7 +22,7 @@ public class StudentDAOList implements StudentDAO {
     }
 
     @Override
-    public List<StudentImpl> findByName(String name) {
+    public Collection<StudentImpl> findByName(String name) {
         return List.of();
     }
 
@@ -31,7 +32,7 @@ public class StudentDAOList implements StudentDAO {
     }
 
     @Override
-    public List<StudentImpl> findAll() {
+    public Collection<StudentImpl> findAll() {
         return List.of();
     }
 
