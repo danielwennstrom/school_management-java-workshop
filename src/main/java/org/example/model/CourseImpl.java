@@ -1,5 +1,6 @@
 package org.example.model;
 
+import org.example.data_access.impl.CourseDAOSet;
 import org.example.interfaces.Course;
 import org.example.sequencers.CourseIdSequencer;
 
@@ -15,14 +16,17 @@ public class CourseImpl implements Course {
     private List<StudentImpl> students;
     private List<LectureImpl> lectures;
 
-    public CourseImpl(String courseName) {
+    public CourseImpl(String courseName, LocalDate startDate) {
         this.id = CourseIdSequencer.getInstance().nextId();
         this.courseName = courseName;
+        this.startDate = startDate;
     }
 
     @Override
     public CourseImpl registerTeacher(TeacherImpl teacher) {
         this.supervisor = teacher;
+        CourseDAOSet.getInstance().saveCourse(this);
+
         return this;
     }
 
@@ -30,6 +34,8 @@ public class CourseImpl implements Course {
     public CourseImpl registerStudent(StudentImpl student) {
         this.students.add(student);
         student.registerCourse(this);
+        CourseDAOSet.getInstance().saveCourse(this);
+
         return this;
     }
 
