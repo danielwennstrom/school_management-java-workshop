@@ -1,16 +1,16 @@
 package org.example.data_access;
 
-import org.example.model.Course;
-import org.example.model.Teacher;
+import org.example.model.CourseImpl;
+import org.example.model.TeacherImpl;
 
 import java.util.List;
 
 public interface TeacherDAO {
-    Teacher saveTeacher(Teacher teacher);
-    Teacher findById(int id);
-    Teacher findByEmail(String email);
-    List<Teacher> findByName(String name);
-    List<Teacher> findByCourse(Course course);
-    boolean deleteTeacher(Teacher teacher);
+    TeacherImpl saveTeacher(TeacherImpl teacher);
+    TeacherImpl findById(int id);
+    TeacherImpl findByEmail(String email);
+    List<TeacherImpl> findByName(String name);
+    List<TeacherImpl> findByCourse(CourseImpl course);
+    boolean deleteTeacher(TeacherImpl teacher);
 
 }

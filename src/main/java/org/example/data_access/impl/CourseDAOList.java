@@ -1,39 +1,39 @@
 package org.example.data_access.impl;
 
 import org.example.data_access.CourseDAO;
-import org.example.model.Course;
+import org.example.model.CourseImpl;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class CourseDAOList implements CourseDAO {
     @Override
-    public Course saveCourse(Course course) {
+    public CourseImpl saveCourse(CourseImpl course) {
         return null;
     }
 
     @Override
-    public Course findById(int id) {
+    public CourseImpl findById(int id) {
         return null;
     }
 
     @Override
-    public List<Course> findByName(String name) {
+    public List<CourseImpl> findByName(String name) {
         return List.of();
     }
 
     @Override
-    public List<Course> findByDate(LocalDate date) {
+    public List<CourseImpl> findByDate(LocalDate date) {
         return List.of();
     }
 
     @Override
-    public List<Course> findAll() {
+    public List<CourseImpl> findAll() {
         return List.of();
     }
 
     @Override
-    public boolean removeCourse(Course course) {
+    public boolean removeCourse(CourseImpl course) {
         return false;
     }
 }

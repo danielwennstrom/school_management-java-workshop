@@ -1,17 +1,17 @@
 package org.example.data_access;
 
-import org.example.model.Course;
-import org.example.model.Lecture;
-import org.example.model.Teacher;
+import org.example.model.CourseImpl;
+import org.example.model.LectureImpl;
+import org.example.model.TeacherImpl;
 
 import java.util.List;
 
 public interface LectureDAO {
-    Lecture saveLecture(Lecture lecture);
-    void assignTeacherToLecture(Teacher teacher);
-    Lecture findById(int id);
-    List<Lecture> findByTeacher(Teacher teacher);
-    List<Lecture> findByCourse(Course course);
-    List<Lecture> findAll();
-    boolean deleteLecture(Lecture lecture);
+    LectureImpl saveLecture(LectureImpl lecture);
+    void assignTeacherToLecture(TeacherImpl teacher);
+    LectureImpl findById(int id);
+    List<LectureImpl> findByTeacher(TeacherImpl teacher);
+    List<LectureImpl> findByCourse(CourseImpl course);
+    List<LectureImpl> findAll();
+    boolean deleteLecture(LectureImpl lecture);
 }

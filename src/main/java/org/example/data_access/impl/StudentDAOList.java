@@ -1,38 +1,38 @@
 package org.example.data_access.impl;
 
 import org.example.data_access.StudentDAO;
-import org.example.model.Student;
+import org.example.model.StudentImpl;
 
 import java.util.List;
 
 public class StudentDAOList implements StudentDAO {
     @Override
-    public Student saveStudent(Student student) {
+    public StudentImpl saveStudent(StudentImpl student) {
         return null;
     }
 
     @Override
-    public Student findByEmail(String email) {
+    public StudentImpl findByEmail(String email) {
         return null;
     }
 
     @Override
-    public List<Student> findByName(String name) {
+    public List<StudentImpl> findByName(String name) {
         return List.of();
     }
 
     @Override
-    public Student findById(int id) {
+    public StudentImpl findById(int id) {
         return null;
     }
 
     @Override
-    public List<Student> findAll() {
+    public List<StudentImpl> findAll() {
         return List.of();
     }
 
     @Override
-    public boolean deleteStudent(Student student) {
+    public boolean deleteStudent(StudentImpl student) {
         return false;
     }
 }

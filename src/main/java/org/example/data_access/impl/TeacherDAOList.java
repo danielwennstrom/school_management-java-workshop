@@ -1,39 +1,39 @@
 package org.example.data_access.impl;
 
 import org.example.data_access.TeacherDAO;
-import org.example.model.Course;
-import org.example.model.Teacher;
+import org.example.model.CourseImpl;
+import org.example.model.TeacherImpl;
 
 import java.util.List;
 
 public class TeacherDAOList implements TeacherDAO {
     @Override
-    public Teacher saveTeacher(Teacher teacher) {
+    public TeacherImpl saveTeacher(TeacherImpl teacher) {
         return null;
     }
 
     @Override
-    public Teacher findById(int id) {
+    public TeacherImpl findById(int id) {
         return null;
     }
 
     @Override
-    public Teacher findByEmail(String email) {
+    public TeacherImpl findByEmail(String email) {
         return null;
     }
 
     @Override
-    public List<Teacher> findByName(String name) {
+    public List<TeacherImpl> findByName(String name) {
         return List.of();
     }
 
     @Override
-    public List<Teacher> findByCourse(Course course) {
+    public List<TeacherImpl> findByCourse(CourseImpl course) {
         return List.of();
     }
 
     @Override
-    public boolean deleteTeacher(Teacher teacher) {
+    public boolean deleteTeacher(TeacherImpl teacher) {
         return false;
     }
 }

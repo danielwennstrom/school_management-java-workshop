@@ -1,14 +1,14 @@
 package org.example.data_access;
 
-import org.example.model.Student;
+import org.example.model.StudentImpl;
 
 import java.util.*;
 
 public interface StudentDAO {
-    Student saveStudent(Student student);
-    Student findByEmail(String email);
-    List<Student> findByName(String name);
-    Student findById(int id);
-    List<Student> findAll();
-    boolean deleteStudent(Student student);
+    StudentImpl saveStudent(StudentImpl student);
+    StudentImpl findByEmail(String email);
+    List<StudentImpl> findByName(String name);
+    StudentImpl findById(int id);
+    List<StudentImpl> findAll();
+    boolean deleteStudent(StudentImpl student);
 }
