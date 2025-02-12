@@ -33,4 +33,5 @@ public class CourseIdSequencer implements Sequencer {
     public void setCurrentId(int id) {
         this.currentId = id;
     }
+
 }

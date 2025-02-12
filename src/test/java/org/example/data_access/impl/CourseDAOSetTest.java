@@ -1,6 +1,7 @@
 package org.example.data_access.impl;
 
 import org.example.model.CourseImpl;
+import org.example.model.LectureImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,12 @@ class CourseDAOSetTest {
     void saveCourse() {
         CourseImpl savedCourse = dao.saveCourse(course);
         assertNotNull(savedCourse);
+        assertEquals("Java Programming", savedCourse.getCourseName());
+
+        savedCourse.setCourseName("Updated Java Programming");
+        dao.saveCourse(savedCourse);
+        assertNotNull(savedCourse);
+        assertEquals("Updated Java Programming", savedCourse.getCourseName());
     }
 
     @Test

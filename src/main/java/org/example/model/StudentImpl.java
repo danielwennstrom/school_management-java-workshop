@@ -14,11 +14,11 @@ public class StudentImpl extends AbstractPerson {
         this.courses = new ArrayList<>();
     }
 
-    public CourseImpl registerCourse(CourseImpl course) {
+    public StudentImpl registerCourse(CourseImpl course) {
         if (!courses.contains(course)) {
             courses.add(course);
             CourseDAOSet.getInstance().saveCourse(course);
-            return course;
+            return this;
         }
 
         return null;

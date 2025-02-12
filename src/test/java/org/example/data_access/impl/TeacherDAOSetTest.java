@@ -13,40 +13,42 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TeacherDAOSetTest {
     private TeacherImpl teacher1;
     private CourseImpl course;
+    private TeacherDAOSet dao;
 
     @BeforeEach
     void setUp() {
         teacher1 = new TeacherImpl("Sven Svensson", "sven.svensson@example.com", "1234567890");
         course = new CourseImpl("Java Programming", LocalDate.now());
-        TeacherDAOSet.getInstance().saveTeacher(teacher1);
+        dao = TeacherDAOSet.getInstance();
+        dao.saveTeacher(teacher1);
     }
 
     @Test
     void getInstance() {
-        assertNotNull(TeacherDAOSet.getInstance());
+        assertNotNull(dao);
     }
 
     @Test
     void saveTeacher() {
-        TeacherImpl returnedTeacher = TeacherDAOSet.getInstance().saveTeacher(teacher1);
+        TeacherImpl returnedTeacher = dao.saveTeacher(teacher1);
         assertEquals(returnedTeacher, teacher1);
     }
 
     @Test
     void findById() {
-        TeacherImpl foundTeacher = TeacherDAOSet.getInstance().findById(teacher1.getId());
+        TeacherImpl foundTeacher = dao.findById(teacher1.getId());
         assertEquals(foundTeacher, teacher1);
     }
 
     @Test
     void findByEmail() {
-        TeacherImpl foundTeacher = TeacherDAOSet.getInstance().findByEmail(teacher1.getEmail());
+        TeacherImpl foundTeacher = dao.findByEmail(teacher1.getEmail());
         assertEquals(foundTeacher.getName(), teacher1.getName());
     }
 
     @Test
     void findByName() {
-        Collection<TeacherImpl> foundTeachers = TeacherDAOSet.getInstance().findByName("Sven Svensson");
+        Collection<TeacherImpl> foundTeachers = dao.findByName("Sven Svensson");
         assertTrue(foundTeachers.stream()
                 .anyMatch(t -> t.getName().equals(teacher1.getName())));
     }
@@ -55,13 +57,13 @@ public class TeacherDAOSetTest {
     void findTeacherByCourse() {
         course.registerTeacher(teacher1);
 
-        TeacherImpl foundTeacher = TeacherDAOSet.getInstance().findTeacherByCourse(course);
+        TeacherImpl foundTeacher = dao.findTeacherByCourse(course);
         assertEquals(foundTeacher, teacher1);
     }
 
     @Test
     void deleteTeacher() {
-        boolean result = TeacherDAOSet.getInstance().deleteTeacher(teacher1);
+        boolean result = dao.deleteTeacher(teacher1);
         assertTrue(result);
     }
 }
