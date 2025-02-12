@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class LectureDAOSet implements LectureDAO {
-    private static Set<LectureImpl> lectures = new HashSet<>();
+    private Set<LectureImpl> lectures = new HashSet<>();
     private static volatile LectureDAOSet instance;
 
     public static LectureDAOSet getInstance() {
