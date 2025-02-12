@@ -11,4 +11,12 @@ public class StudentImpl extends AbstractPerson {
     public StudentImpl(String name, String email, String address) {
         super(name, email, address);
     }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 }

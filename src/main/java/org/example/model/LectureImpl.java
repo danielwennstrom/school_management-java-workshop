@@ -21,4 +21,36 @@ public class LectureImpl implements Lecture {
     public Lecture registerTeacher(TeacherImpl teacher) {
         return null;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLectureName() {
+        return lectureName;
+    }
+
+    public void setLectureName(String lectureName) {
+        this.lectureName = lectureName;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public List<TeacherImpl> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<TeacherImpl> teachers) {
+        this.teachers = teachers;
+    }
 }
