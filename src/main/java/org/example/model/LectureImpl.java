@@ -18,7 +18,7 @@ public class LectureImpl implements Lecture {
     }
 
     @Override
-    public Lecture registerTeacher(TeacherImpl teacher) {
+    public LectureImpl registerTeacher(TeacherImpl teacher) {
         return null;
     }
 

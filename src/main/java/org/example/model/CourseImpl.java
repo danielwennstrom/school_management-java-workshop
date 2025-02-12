@@ -21,13 +21,16 @@ public class CourseImpl implements Course {
     }
 
     @Override
-    public Course registerTeacher(TeacherImpl teacher) {
-        return null;
+    public CourseImpl registerTeacher(TeacherImpl teacher) {
+        this.supervisor = teacher;
+        return this;
     }
 
     @Override
-    public Course registerStudent(StudentImpl student) {
-        return null;
+    public CourseImpl registerStudent(StudentImpl student) {
+        this.students.add(student);
+        student.registerCourse(this);
+        return this;
     }
 
     public int getId() {

@@ -1,7 +1,8 @@
 package org.example.interfaces;
 
+import org.example.model.LectureImpl;
 import org.example.model.TeacherImpl;
 
 public interface Lecture {
-    Lecture registerTeacher(TeacherImpl teacher);
+    LectureImpl registerTeacher(TeacherImpl teacher);
 }
