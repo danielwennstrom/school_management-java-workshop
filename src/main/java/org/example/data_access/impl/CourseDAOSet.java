@@ -10,7 +10,18 @@ import java.util.Objects;
 import java.util.Set;
 
 public class CourseDAOSet implements CourseDAO {
-    private static Set<CourseImpl> courses = new HashSet<>();
+    private Set<CourseImpl> courses = new HashSet<>();
+    private static volatile CourseDAOSet instance;
+
+    public static CourseDAOSet getInstance() {
+        if (instance == null) {
+            synchronized (CourseDAOSet.class) {
+                if (instance == null)
+                    instance = new CourseDAOSet();
+            }
+        }
+        return instance;
+    }
 
     @Override
     public CourseImpl saveCourse(CourseImpl course) {
