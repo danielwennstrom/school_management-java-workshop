@@ -26,7 +26,7 @@ public class LectureDAOSet implements LectureDAO {
     @Override
     public LectureImpl saveLecture(LectureImpl lecture) {
         if (lecture == null)
-            throw new IllegalArgumentException("Course can't be null");
+            throw new IllegalArgumentException("Lecture can't be null");
 
         LectureImpl existingLecture = findById(lecture.getId());
         if (existingLecture == null) {
