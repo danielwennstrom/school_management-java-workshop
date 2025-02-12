@@ -5,17 +5,16 @@ import org.example.model.CourseImpl;
 import org.example.model.LectureImpl;
 import org.example.model.TeacherImpl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LectureDAOList implements LectureDAO {
+    private static Set<LectureImpl> lectures = new HashSet<>();
+
     @Override
     public LectureImpl saveLecture(LectureImpl lecture) {
         return null;
-    }
-
-    @Override
-    public void assignTeacherToLecture(TeacherImpl teacher) {
-
     }
 
     @Override

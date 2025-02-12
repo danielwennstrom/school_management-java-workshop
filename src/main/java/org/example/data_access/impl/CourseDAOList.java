@@ -4,12 +4,16 @@ import org.example.data_access.CourseDAO;
 import org.example.model.CourseImpl;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CourseDAOList implements CourseDAO {
+    private static Set<CourseImpl> courses = new HashSet<>();
+
     @Override
     public CourseImpl saveCourse(CourseImpl course) {
-        return null;
+        return course;
     }
 
     @Override

@@ -4,9 +4,13 @@ import org.example.data_access.TeacherDAO;
 import org.example.model.CourseImpl;
 import org.example.model.TeacherImpl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TeacherDAOList implements TeacherDAO {
+    private static Set<TeacherImpl> teachers = new HashSet<>();
+
     @Override
     public TeacherImpl saveTeacher(TeacherImpl teacher) {
         return null;

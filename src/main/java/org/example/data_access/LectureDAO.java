@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface LectureDAO {
     LectureImpl saveLecture(LectureImpl lecture);
-    void assignTeacherToLecture(TeacherImpl teacher);
     LectureImpl findById(int id);
     List<LectureImpl> findByTeacher(TeacherImpl teacher);
     List<LectureImpl> findByCourse(CourseImpl course);

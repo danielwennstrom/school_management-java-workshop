@@ -3,9 +3,13 @@ package org.example.data_access.impl;
 import org.example.data_access.StudentDAO;
 import org.example.model.StudentImpl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StudentDAOList implements StudentDAO {
+    private static Set<StudentImpl> students = new HashSet<>();
+
     @Override
     public StudentImpl saveStudent(StudentImpl student) {
         return null;
