@@ -5,6 +5,7 @@ import org.example.interfaces.Course;
 import org.example.sequencers.CourseIdSequencer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseImpl implements Course {
@@ -20,6 +21,8 @@ public class CourseImpl implements Course {
         this.id = CourseIdSequencer.getInstance().nextId();
         this.courseName = courseName;
         this.startDate = startDate;
+        this.students = new ArrayList<>();
+        this.lectures = new ArrayList<>();
     }
 
     @Override

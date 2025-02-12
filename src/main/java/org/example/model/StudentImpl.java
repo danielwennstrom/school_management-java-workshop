@@ -2,8 +2,8 @@ package org.example.model;
 
 import org.example.abstracts.AbstractPerson;
 import org.example.data_access.impl.CourseDAOSet;
-import org.example.interfaces.Course;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentImpl extends AbstractPerson {
@@ -11,6 +11,7 @@ public class StudentImpl extends AbstractPerson {
 
     public StudentImpl(String name, String email, String address) {
         super(name, email, address);
+        this.courses = new ArrayList<>();
     }
 
     public CourseImpl registerCourse(CourseImpl course) {

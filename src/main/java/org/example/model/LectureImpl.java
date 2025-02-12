@@ -1,9 +1,12 @@
 package org.example.model;
 
+import org.example.data_access.impl.CourseDAOSet;
+import org.example.data_access.impl.LectureDAOSet;
 import org.example.interfaces.Lecture;
 import org.example.sequencers.LectureIdSequencer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LectureImpl implements Lecture {
@@ -15,11 +18,15 @@ public class LectureImpl implements Lecture {
     public LectureImpl(String lectureName) {
         this.id = LectureIdSequencer.getInstance().nextId();
         this.lectureName = lectureName;
+        this.teachers = new ArrayList<>();
     }
 
     @Override
     public LectureImpl registerTeacher(TeacherImpl teacher) {
-        return null;
+        this.teachers.add(teacher);
+        LectureDAOSet.getInstance().saveLecture(this);
+
+        return this;
     }
 
     public int getId() {
