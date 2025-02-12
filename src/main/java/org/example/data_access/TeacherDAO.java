@@ -10,7 +10,7 @@ public interface TeacherDAO {
     TeacherImpl findById(int id);
     TeacherImpl findByEmail(String email);
     Collection<TeacherImpl> findByName(String name);
-    Collection<TeacherImpl> findByCourse(CourseImpl course);
+    TeacherImpl findTeacherByCourse(CourseImpl course);
     boolean deleteTeacher(TeacherImpl teacher);
 
 }
