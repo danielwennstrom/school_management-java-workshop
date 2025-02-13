@@ -9,6 +9,8 @@ import java.util.List;
 public class StudentImpl extends AbstractPerson {
     private List<CourseImpl> courses;
 
+    public StudentImpl() {}
+
     public StudentImpl(String name, String email, String address) {
         super(name, email, address);
         this.courses = new ArrayList<>();

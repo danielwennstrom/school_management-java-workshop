@@ -8,6 +8,8 @@ public abstract class AbstractPerson {
      private String email;
      private String address;
 
+     public AbstractPerson() {}
+
      public AbstractPerson(String name, String email, String address) {
           this.id = PersonIdSequencer.getInstance().nextId();
           this.name = name;
