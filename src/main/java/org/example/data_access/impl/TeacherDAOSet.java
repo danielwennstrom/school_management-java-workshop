@@ -80,6 +80,11 @@ public class TeacherDAOSet implements TeacherDAO {
     }
 
     @Override
+    public Collection<TeacherImpl> findAll() {
+        return Set.copyOf(teachers);
+    }
+
+    @Override
     public boolean deleteTeacher(TeacherImpl teacher) {
         if (teacher == null) {
             throw new IllegalArgumentException("Lecture can't be null");
