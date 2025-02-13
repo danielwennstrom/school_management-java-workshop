@@ -48,4 +48,14 @@ public abstract class AbstractPerson {
      public void setAddress(String address) {
           this.address = address;
      }
+
+     @Override
+     public String toString() {
+          return "AbstractPerson{" +
+                  "id=" + id +
+                  ", name='" + name + '\'' +
+                  ", email='" + email + '\'' +
+                  ", address='" + address + '\'' +
+                  '}';
+     }
 }
