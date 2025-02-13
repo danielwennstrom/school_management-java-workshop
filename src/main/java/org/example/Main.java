@@ -14,7 +14,9 @@ import org.example.model.TeacherImpl;
 import org.example.model.StudentImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -32,17 +34,7 @@ public class Main {
 
         while (running) {
             displaySelectHandler(selector);
-            System.out.println("1) Register new person");
-            System.out.println("2) Create course");
-            System.out.println("3) Create lecture");
-            System.out.println("4) Assign person to...");
-            System.out.println("5) Find person, course or lecture by...");
-            System.out.println("6) Create course");
-            System.out.println("7) Create course");
-            System.out.println("8) Create course");
-            System.out.println("9) Create course");
-            System.out.println("0) Exit");
-
+            displayDatabaseActions();
             System.out.println("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -55,7 +47,7 @@ public class Main {
                     createNewCourse(teacherDAO, scanner, courseDAO);
                     break;
                 case 3:
-                    createNewLecture(courseDAO, scanner, teacherDAO, lectureDAO);
+                    createNewLecture(courseDAO, scanner, teacherDAO, lectureDAO, selector);
                     break;
                 case 4:
                     System.out.println("Assign a student or teacher?");
@@ -111,51 +103,90 @@ public class Main {
         }
     }
 
-    private static void createNewLecture(CourseDAOSet courseDAO, Scanner scanner, TeacherDAOSet teacherDAO, LectureDAOSet lectureDAO) {
-        String subChoice;
+    private static void displayDatabaseActions() {
+        System.out.println("1) Register new person");
+        System.out.println("2) Create course");
+        System.out.println("3) Create lecture");
+        System.out.println("4) Assign person to...");
+        System.out.println("5) Find person, course or lecture by...");
+        System.out.println("0) Exit");
+    }
+
+    private static void createNewLecture(CourseDAOSet courseDAO, Scanner scanner, TeacherDAOSet teacherDAO, LectureDAOSet lectureDAO, SelectionHandlerImpl selector) {
         LectureImpl lecture;
+        CourseImpl course;
         Collection<CourseImpl> allCourses = courseDAO.findAll();
 
-        System.out.println("Enter course ID: ");
-        for (CourseImpl course : allCourses)
-            System.out.printf("%s) %s", course.getId(), course.getCourseName());
 
-        int courseId = scanner.nextInt();
-        CourseImpl course = courseDAO.findById(courseId);
-        System.out.println("Enter lecture name: ");
-        String lectureName = scanner.nextLine();
-        lecture = new LectureImpl(lectureName);
-        System.out.println("Assign teacher to lecture? Y/N");
-        subChoice = scanner.nextLine();
-        subChoice = subChoice.toLowerCase();
+        while (true) {
+            for (CourseImpl c : allCourses)
+                System.out.printf("%s) %s", c.getId(), c.getCourseName());
 
-        switch (subChoice) {
-            case "y":
-                Collection<TeacherImpl> allTeachers = teacherDAO.findAll();
+            System.out.println("Enter course ID: ");
+            int courseId = scanner.nextInt();
+            course = courseDAO.findById(courseId);
 
-                System.out.println("Enter teacher ID: ");
-                for (TeacherImpl teacher : allTeachers)
-                    System.out.printf("%s) %s", teacher.getId(), teacher.getName());
-
-                TeacherImpl supervisor = teacherDAO.findById(scanner.nextInt());
-
-                if (supervisor == null)
-                    System.out.println("Invalid teacher ID. Try again.");
-                else {
-                    lecture.registerTeacher(supervisor);
-                }
-                break;
-            case "n":
-                lectureDAO.saveLecture(lecture);
-                break;
-            default:
-                System.out.println("Invalid choice. Try again.");
+            if (course == null)
+                System.out.println("Invalid course ID. Please try again.");
+            else
                 break;
         }
 
-        course.registerLecture(lecture);
+        System.out.println("Enter lecture name: ");
+        String lectureName = scanner.nextLine();
+        lecture = new LectureImpl(lectureName);
 
+        askAssignTeacherToLecture(scanner, teacherDAO, lectureDAO, lecture, selector);
+
+        course.registerLecture(lecture);
         System.out.println("Lecture created successfully.");
+    }
+
+    private static void askAssignTeacherToLecture(Scanner scanner, TeacherDAOSet teacherDAO, LectureDAOSet lectureDAO, LectureImpl lecture, SelectionHandlerImpl selector) {
+        TeacherImpl teacher = null;
+        System.out.println("Assign teacher to lecture? Y/N");
+
+        if (scanner.nextLine().equalsIgnoreCase("y")) {
+            if (!selector.getSelections().isEmpty() && selector.getSelections().getFirst().getRole() == Role.TEACHER) {
+                askAssignSelectedTeachersToLecture(scanner, lecture, selector);
+            } else {
+                teacher = askTeacherToAssign(scanner, teacherDAO);
+                lecture.registerTeacher(teacher);
+            }
+        }
+
+        lectureDAO.saveLecture(lecture);
+    }
+
+    private static void askAssignSelectedTeachersToLecture(Scanner scanner, LectureImpl lecture, SelectionHandlerImpl selector) {
+        System.out.print("Assign current selected teachers? Y/N");
+        if (scanner.nextLine().equalsIgnoreCase("y")) {
+            List<TeacherImpl> teacherList = new ArrayList<>();
+            for (AbstractPerson person : selector.getSelections())
+                teacherList.add((TeacherImpl) person);
+
+            lecture.setTeachers(teacherList);
+        }
+    }
+
+    private static TeacherImpl askTeacherToAssign(Scanner scanner, TeacherDAOSet teacherDAO) {
+        while (true) {
+            System.out.println("Enter teacher ID: ");
+            if (!scanner.hasNextInt()) {
+                String invalidInput = scanner.next();
+                System.out.println("Invalid input. Please try again.\n");
+                continue;
+            }
+
+            int teacherId = scanner.nextInt();
+            TeacherImpl teacher = teacherDAO.findById(teacherId);
+
+            if (teacher == null) {
+                System.out.println("Invalid teacher ID. Please try again.");
+            } else {
+                return teacher;
+            }
+        }
     }
 
     private static boolean assignStudentToCourse(Scanner scanner, StudentDAO studentDAO, CourseImpl course) {
@@ -206,11 +237,14 @@ public class Main {
 
         CourseImpl course = new CourseImpl(courseName, startDate);
 
-        if (assignTeacherToCourse(scanner, teacherDAO, course)) {
-            courseDAO.saveCourse(course);
-            System.out.println("\nCourse created successfully.");
-        } else {
-            System.out.println("Failed to create course due to invalid teacher ID.");
+        while (true) {
+            if (assignTeacherToCourse(scanner, teacherDAO, course)) {
+                courseDAO.saveCourse(course);
+                System.out.println("\nCourse created successfully.");
+                return;
+            } else {
+                System.out.println("Failed to create course due to invalid teacher ID.");
+            }
         }
     }
 
