@@ -36,20 +36,18 @@ public class Main {
             displaySelectHandler(selector);
             displayDatabaseActions();
             System.out.println("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
+            String choice = scanner.nextLine();
             switch (choice) {
-                case 1:
+                case "1":
                     registerNewPerson(scanner, teacherDAO, studentDAO, selector);
                     break;
-                case 2:
+                case "2":
                     createNewCourse(teacherDAO, scanner, courseDAO);
                     break;
-                case 3:
+                case "3":
                     createNewLecture(courseDAO, scanner, teacherDAO, lectureDAO, selector);
                     break;
-                case 4:
+                case "4":
                     System.out.println("Assign a student or teacher?");
                     System.out.println("1) Student");
                     System.out.println("2) Teacher");
@@ -64,7 +62,7 @@ public class Main {
                         default:
                             System.out.println("Invalid choice. Try again.");
                     }
-                case 5:
+                case "5":
                     System.out.println("Find person, course, or a lecture?: ");
                     System.out.println("1) Person");
                     System.out.println("2) Course");
@@ -92,7 +90,7 @@ public class Main {
                         default:
                             System.out.println("Invalid choice. Try again.");
                     }
-                case 0:
+                case "0":
                     System.out.println("Exiting the program.");
                     running = false;
                     break;
@@ -222,7 +220,10 @@ public class Main {
     }
 
     private static void displaySelectHandler(SelectionHandlerImpl selector) {
-        System.out.println("Current selections: " + selector.toString());
+        if (!selector.getSelections().isEmpty())
+            System.out.printf("Current %s selections: %s\n", selector.getSelectorRole() ,selector.toString());
+        else
+            System.out.printf("Current selections: %s\n", selector.toString());
         System.out.println("a) Add person to selection, c) Clear selections, d) Delete selection\n");
     }
 
@@ -275,7 +276,7 @@ public class Main {
             addToSelectionList(person, selector, scanner);
         }
 
-        System.out.printf("%s %s with the ID %s registered successfully!", person.getRole(), person.getName(), person.getId());
+        System.out.printf("%s %s with the ID %s registered successfully!\n", person.getRole(), person.getName(), person.getId());
     }
 
     private static AbstractPerson createTeacher(Scanner scanner) {

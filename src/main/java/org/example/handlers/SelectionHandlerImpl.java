@@ -1,6 +1,7 @@
 package org.example.handlers;
 
 import org.example.abstracts.AbstractPerson;
+import org.example.abstracts.AbstractPerson.Role;
 import org.example.interfaces.SelectionHandler;
 
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class SelectionHandlerImpl implements SelectionHandler {
             throw new IllegalArgumentException("Person can't be null.");
 
         selections.remove(person);
+    }
+
+    @Override
+    public Role getSelectorRole() {
+        return selections.stream().findFirst().orElseThrow().getRole();
     }
 
     @Override
