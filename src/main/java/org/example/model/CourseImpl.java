@@ -42,6 +42,14 @@ public class CourseImpl implements Course {
         return this;
     }
 
+    @Override
+    public CourseImpl registerLecture(LectureImpl lecture) {
+        this.lectures.add(lecture);
+        CourseDAOSet.getInstance().saveCourse(this);
+
+        return this;
+    }
+
     public int getId() {
         return id;
     }
