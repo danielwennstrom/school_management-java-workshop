@@ -15,7 +15,7 @@ public abstract class AbstractPerson {
 
     private Role role;
 
-    public AbstractPerson() {}
+    public AbstractPerson() { this.id = PersonIdSequencer.getInstance().nextId();}
 
     public AbstractPerson(String name, String email, String address) {
         this.id = PersonIdSequencer.getInstance().nextId();

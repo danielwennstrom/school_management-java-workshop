@@ -15,7 +15,7 @@ public class SelectionHandlerImpl implements SelectionHandler {
 
     @Override
     public boolean addSelection(AbstractPerson person) {
-        AbstractPerson first = selections.getFirst();
+        AbstractPerson first = selections.stream().findFirst().orElse(null);
 
         if (person == null)
             throw new IllegalArgumentException("Person can't be null.");
@@ -44,5 +44,22 @@ public class SelectionHandlerImpl implements SelectionHandler {
 
     public List<AbstractPerson> getSelections() {
         return selections;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (selections.isEmpty()) {
+            sb.append("none");
+        } else {
+            for (int i = 0; i < selections.size(); i++) {
+                AbstractPerson person = selections.get(i);
+                sb.append("(").append(person.getId()).append(") ").append(person.getName());
+                if (i != selections.size() - 1)
+                    sb.append(", ");
+            }
+        }
+
+        return sb.toString();
     }
 }
