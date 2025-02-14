@@ -7,5 +7,5 @@ public interface SelectionHandler {
     boolean addSelection(AbstractPerson person);
     void removeSelection(AbstractPerson person);
     Role getSelectorRole();
-    void clearSelection();
+    void clearSelections();
 }

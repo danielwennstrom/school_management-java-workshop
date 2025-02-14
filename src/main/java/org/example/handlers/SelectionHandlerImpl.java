@@ -44,7 +44,7 @@ public class SelectionHandlerImpl implements SelectionHandler {
     }
 
     @Override
-    public void clearSelection() {
+    public void clearSelections() {
         selections.clear();
     }
 
