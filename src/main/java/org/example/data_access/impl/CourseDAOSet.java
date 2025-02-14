@@ -59,7 +59,7 @@ public class CourseDAOSet implements CourseDAO {
     @Override
     public Collection<CourseImpl> findByName(String name) {
         return courses.stream()
-                .filter(c -> Objects.equals(c.getCourseName(), name))
+                .filter(c -> c.getCourseName().contains(name))
                 .toList();
     }
 
