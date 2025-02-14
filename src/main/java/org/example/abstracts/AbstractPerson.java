@@ -69,4 +69,8 @@ public abstract class AbstractPerson {
         return String.format("ID: %s, Name: %s \n Email: %s, Address: %s",
                 getId(), getName(), getEmail(), getAddress());
     }
+
+    public String shortToString() {
+        return String.format("(%s) %s", getId(), getName());
+    }
 }
