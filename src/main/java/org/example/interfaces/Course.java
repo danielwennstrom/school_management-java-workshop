@@ -9,4 +9,5 @@ public interface Course {
     CourseImpl registerTeacher(TeacherImpl teacher);
     CourseImpl registerStudent(StudentImpl student);
     CourseImpl registerLecture(LectureImpl lecture);
+    String shortToString();
 }

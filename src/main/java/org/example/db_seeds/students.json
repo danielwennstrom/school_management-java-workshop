@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "address": "789 Oak St, Somewhere, USA"
+  },
+  {
+    "name": "Bob Davis",
+    "email": "bob.davis@example.com",
+    "address": "101 West St, Townsville, USA"
+  },
+  {
+    "name": "Charlie Taylor",
+    "email": "charlie.taylor@example.com",
+    "address": "202 North Ave, Countryville, USA"
+  },
+  {
+    "name": "Debbie Jones",
+    "email": "debbie.jones@example.com",
+    "address": "303 South Rd, City of Dreams, USA"
+  },
+  {
+    "name": "Eve Thompson",
+    "email": "eve.thompson@example.com",
+    "address": "404 West St, Village of Wonders, USA"
+  }
+]

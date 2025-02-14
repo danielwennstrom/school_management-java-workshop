@@ -1,0 +1,12 @@
+[
+  {
+    "courseName": "Introduction to Java",
+    "startDate": "2023-10-01",
+    "weekDuration": 16
+  },
+  {
+    "courseName": "Python Basics",
+    "startDate": "2023-10-05",
+    "weekDuration": 8
+  }
+]

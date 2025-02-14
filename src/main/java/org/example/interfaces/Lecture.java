@@ -5,4 +5,6 @@ import org.example.model.TeacherImpl;
 
 public interface Lecture {
     LectureImpl registerTeacher(TeacherImpl teacher);
+    String shortToString();
+    String shortTeachersString();
 }

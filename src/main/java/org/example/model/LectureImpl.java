@@ -1,6 +1,5 @@
 package org.example.model;
 
-import org.example.data_access.impl.CourseDAOSet;
 import org.example.data_access.impl.LectureDAOSet;
 import org.example.interfaces.Lecture;
 import org.example.sequencers.LectureIdSequencer;
@@ -59,5 +58,51 @@ public class LectureImpl implements Lecture {
 
     public void setTeachers(List<TeacherImpl> teachers) {
         this.teachers = teachers;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(id).append("   ");
+        sb.append("Lecture Name: ").append(lectureName).append("\n");
+        sb.append("Date: ").append(date).append("\n");
+        sb.append("Lecturers: \n");
+
+        if (teachers == null || teachers.isEmpty()) {
+            sb.append("none");
+            return sb.toString();
+        }
+
+        if (teachers.size() == 1) {
+            sb.append(teachers.getFirst().shortToString());
+        } else {
+            for (int i = 0; i < teachers.size(); i++) {
+                sb.append(teachers.get(i).shortToString());
+                if (i != teachers.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String shortToString() {
+        return String.format("(%s) %s", getId(), getLectureName());
+    }
+
+    public String shortTeachersString() {
+        StringBuilder sb = new StringBuilder();
+        if (teachers == null || teachers.isEmpty()) {
+            sb.append("none");
+            return sb.toString();
+        }
+        for (int i = 0; i < teachers.size(); i++) {
+            sb.append(teachers.get(i).shortToString());
+            if (i != teachers.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
     }
 }

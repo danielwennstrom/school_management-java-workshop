@@ -70,6 +70,8 @@ public class LectureDAOSetTest {
         Collection<CourseImpl> courses = courseDao.findAll();
         assertTrue(courses.stream().anyMatch(c -> c.getId() == course.getId()));
 
+        course.registerLecture(lecture1);
+        course.registerLecture(lecture2);
         Collection<LectureImpl> foundLectures = dao.findByCourse(course);
         assertTrue(foundLectures.stream()
                 .anyMatch(l -> l.getLectureName().equals("Lecture 1")));

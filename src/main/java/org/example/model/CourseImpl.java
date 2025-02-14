@@ -1,5 +1,7 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.data_access.impl.CourseDAOSet;
 import org.example.interfaces.Course;
 import org.example.sequencers.CourseIdSequencer;
@@ -12,15 +14,21 @@ public class CourseImpl implements Course {
     private int id;
     private String courseName;
     private TeacherImpl supervisor;
+    @JsonProperty("startDate")
     private LocalDate startDate;
+    @JsonProperty("weekDuration")
     private int weekDuration;
     private List<StudentImpl> students;
     private List<LectureImpl> lectures;
 
-    public CourseImpl(String courseName, LocalDate startDate) {
+    @JsonCreator
+    public CourseImpl(@JsonProperty("courseName") String courseName,
+                      @JsonProperty("startDate") LocalDate startDate,
+                      @JsonProperty("weekDuration") int weekDuration) {
         this.id = CourseIdSequencer.getInstance().nextId();
         this.courseName = courseName;
         this.startDate = startDate;
+        this.weekDuration = weekDuration;
         this.students = new ArrayList<>();
         this.lectures = new ArrayList<>();
     }
@@ -104,5 +112,27 @@ public class CourseImpl implements Course {
 
     public void setLectures(List<LectureImpl> lectures) {
         this.lectures = lectures;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("ID: ").append(id).append("    ").append("Course Name: ")
+                .append(courseName).append("\n").append("Starting date: ").append(startDate).append("   ")
+                .append("Week Duration: ").append(weekDuration).append("\n")
+                .append("Supervisor: ");
+
+        if (supervisor != null) {
+            sb.append("(").append(supervisor.getId()).append(")").append(" ");
+            sb.append(supervisor.getName());
+        } else
+            sb.append("none");
+
+        return sb.toString();
+    }
+
+    public String shortToString() {
+        return String.format("(%s) %s", getId(), getCourseName());
     }
 }
