@@ -55,7 +55,7 @@ public class StudentDAOSet implements StudentDAO {
     @Override
     public Collection<StudentImpl> findByName(String name) {
         return students.stream()
-                .filter(s -> s.getName().equals(name))
+                .filter(s -> s.getName().contains(name))
                 .toList();
     }
 

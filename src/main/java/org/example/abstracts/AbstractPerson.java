@@ -66,11 +66,7 @@ public abstract class AbstractPerson {
 
     @Override
     public String toString() {
-        return "AbstractPerson{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return String.format("ID: %s, Name: %s \n Email: %s, Address: %s",
+                getId(), getName(), getEmail(), getAddress());
     }
 }

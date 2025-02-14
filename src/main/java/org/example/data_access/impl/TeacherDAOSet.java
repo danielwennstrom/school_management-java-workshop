@@ -65,7 +65,7 @@ public class TeacherDAOSet implements TeacherDAO {
     @Override
     public Collection<TeacherImpl> findByName(String name) {
         return teachers.stream()
-                .filter(t -> t.getName().equals(name))
+                .filter(t -> t.getName().contains(name))
                 .toList();
     }
 
