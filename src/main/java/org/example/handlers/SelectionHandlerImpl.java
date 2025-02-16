@@ -26,8 +26,12 @@ public class SelectionHandlerImpl implements SelectionHandler {
             return false;
         }
 
-        selections.add(person);
-        return true;
+        if (!selections.contains(person)) {
+            selections.add(person);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

@@ -165,20 +165,24 @@ public class CourseImpl implements Course {
 
         sb.append("\n").append("Lectures: ").append("\n");
 
-        for (int i = 0; i < lectures.size(); i += 2) {
-            LectureImpl lecture1 = lectures.get(i);
-            LectureImpl lecture2 = null;
+        if (lectures.isEmpty())
+            sb.append("none").append("\n");
+        else {
+            for (int i = 0; i < lectures.size(); i += 2) {
+                LectureImpl lecture1 = lectures.get(i);
+                LectureImpl lecture2 = null;
 
-            if (i + 1 < lectures.size()) {
-                lecture2 = lectures.get(i + 1);
+                if (i + 1 < lectures.size()) {
+                    lecture2 = lectures.get(i + 1);
+                }
+
+                sb.append(lecture1.shortToString()).append("   ");
+                if (lecture2 != null) {
+                    sb.append(lecture2.shortToString());
+                }
+
+                sb.append("\n");
             }
-
-            sb.append(lecture1.shortToString()).append("   ");
-            if (lecture2 != null) {
-                sb.append(lecture2.shortToString());
-            }
-
-            sb.append("\n");
         }
 
         return sb.toString();

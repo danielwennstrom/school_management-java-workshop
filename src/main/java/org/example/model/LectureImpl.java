@@ -98,6 +98,11 @@ public class LectureImpl implements Lecture {
         sb.append("ID: ").append(id).append("   ");
         sb.append("Lecture Name: ").append(lectureName).append("\n");
         sb.append("Date: ").append(date).append("\n");
+        sb.append("Course: ");
+        if (course != null)
+            sb.append(course.shortToString()).append("\n");
+        else
+            sb.append("none").append("\n");
         sb.append("Lecturers: \n");
 
         if (teachers == null || teachers.isEmpty()) {

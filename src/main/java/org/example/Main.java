@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.abstracts.AbstractPerson;
 import org.example.abstracts.AbstractPerson.Role;
+import org.example.data_access.LectureDAO;
 import org.example.data_access.impl.CourseDAOSet;
 import org.example.data_access.impl.LectureDAOSet;
 import org.example.data_access.impl.StudentDAOSet;
@@ -33,72 +34,29 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        int subChoiceInt;
 
         seedInitialDatabase(studentDAO, teacherDAO, courseDAO, lectureDAO);
 
         while (running) {
             displayCurrentSelections();
-            displaySelectHandlerCommands();
             displayDatabaseActions();
             System.out.println("Enter your choice: ");
-            String choice = scanner.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
             switch (choice) {
-                case "1":
+                case 1:
                     registerNewPerson(teacherDAO, studentDAO, scanner);
                     break;
-                case "2":
+                case 2:
                     createNewCourse(teacherDAO, courseDAO, scanner);
                     break;
-                case "3":
+                case 3:
                     createNewLecture(courseDAO, lectureDAO, teacherDAO, scanner);
                     break;
-                case "4":
+                case 4:
+                    askFindByType(scanner, teacherDAO, studentDAO, courseDAO, lectureDAO);
                     break;
-                case "5":
-                    System.out.println("Find person, course, or a lecture?: ");
-                    System.out.println("1) Person");
-                    System.out.println("2) Course");
-                    System.out.println("3) Lecture");
-                    subChoiceInt = scanner.nextInt();
-                    scanner.nextLine();
-                    switch (subChoiceInt) {
-                        case 1:
-                            System.out.println("Find a student or teacher?: ");
-                            System.out.println("1) Teacher");
-                            System.out.println("2) Student");
-                            int subChoicePerson = scanner.nextInt();
-                            scanner.nextLine();
-                            int subChoiceMethod;
-                            switch (subChoicePerson) {
-                                case 1:
-                                    TeacherImpl resultTeacher = askFindTeacherByMethod(scanner, teacherDAO);
-                                    handleSelectCommand(resultTeacher, scanner);
-                                    break;
-                                case 2:
-                                    StudentImpl resultStudent = askFindStudentByMethod(scanner, studentDAO);
-                                    handleSelectCommand(resultStudent, scanner);
-                                    break;
-                                default:
-                                    System.out.println("Invalid choice. Try again. (Person)");
-                                    break;
-                            }
-                            break;
-
-                        case 2:
-                            CourseImpl resultCourse = askFindCourseByMethod(scanner, courseDAO, lectureDAO, studentDAO, teacherDAO);
-                            handleSelectCommandCourse(courseDAO, lectureDAO, studentDAO, teacherDAO, resultCourse, scanner);
-                            break;
-                        case 3:
-                            LectureImpl resultLecture = askFindLectureByMethod(scanner, lectureDAO, teacherDAO, courseDAO);
-                            handleSelectCommandLecture(lectureDAO, teacherDAO, resultLecture, scanner);
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Try again.");
-                            break;
-                    }
-                    break;
-                case "0":
+                case 0:
                     System.out.println("Exiting the program.");
                     running = false;
                     break;
@@ -106,6 +64,62 @@ public class Main {
                     System.out.println("Invalid choice. Please try again. (Main)");
                     break;
             }
+        }
+    }
+
+    private static void askFindByType(Scanner scanner, TeacherDAOSet teacherDAO, StudentDAOSet studentDAO, CourseDAOSet courseDAO, LectureDAOSet lectureDAO) {
+        int subChoiceInt;
+        System.out.println("Find person, course, or a lecture?: ");
+        System.out.println("1) Person");
+        System.out.println("2) Course");
+        System.out.println("3) Lecture");
+        subChoiceInt = scanner.nextInt();
+        scanner.nextLine();
+        switch (subChoiceInt) {
+            case 1:
+                askFindPersonByMethod(scanner, teacherDAO, studentDAO);
+                break;
+            case 2:
+                CourseImpl resultCourse = askFindCourseByMethod(scanner, courseDAO);
+                if (resultCourse == null)
+                    break;
+                handleSelectCommandCourse(courseDAO, lectureDAO, studentDAO, teacherDAO, resultCourse, scanner);
+                break;
+            case 3:
+                LectureImpl resultLecture = askFindLectureByMethod(scanner, lectureDAO, teacherDAO, courseDAO);
+                if (resultLecture == null)
+                    break;
+                handleSelectCommandLecture(lectureDAO, teacherDAO, resultLecture, scanner);
+                break;
+            default:
+                System.out.println("Invalid choice. Try again.");
+                break;
+        }
+    }
+
+    private static void askFindPersonByMethod(Scanner scanner, TeacherDAOSet teacherDAO, StudentDAOSet studentDAO) {
+        System.out.println("Find a student or teacher?: ");
+        System.out.println("1) Teacher");
+        System.out.println("2) Student");
+        int subChoicePerson = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (subChoicePerson) {
+            case 1:
+                TeacherImpl resultTeacher = askFindTeacherByMethod(scanner, teacherDAO);
+                if (resultTeacher == null)
+                    break;
+                handleSelectCommand(studentDAO, teacherDAO, resultTeacher, scanner);
+                break;
+            case 2:
+                StudentImpl resultStudent = askFindStudentByMethod(scanner, studentDAO);
+                if (resultStudent == null)
+                    break;
+                handleSelectCommand(studentDAO, teacherDAO, resultStudent, scanner);
+                break;
+            default:
+                System.out.println("Invalid choice. Try again. (Person)");
+                break;
         }
     }
 
@@ -139,7 +153,7 @@ public class Main {
         return resultLecture;
     }
 
-    private static CourseImpl askFindCourseByMethod(Scanner scanner, CourseDAOSet courseDAO, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO) {
+    private static CourseImpl askFindCourseByMethod(Scanner scanner, CourseDAOSet courseDAO) {
         int subChoiceMethod;
         System.out.println("Find course by: ");
         System.out.println("1) ID");
@@ -147,16 +161,17 @@ public class Main {
         System.out.println("3) All");
         subChoiceMethod = scanner.nextInt();
         scanner.nextLine();
+
         CourseImpl resultCourse = null;
         switch (subChoiceMethod) {
             case 1:
-                resultCourse = findCourseById(courseDAO, lectureDAO, studentDAO, teacherDAO, scanner);
+                resultCourse = findCourseById(courseDAO, scanner);
                 break;
             case 2:
-                resultCourse = findCourseByName(courseDAO, lectureDAO, studentDAO, teacherDAO, scanner);
+                resultCourse = findCourseByName(courseDAO, scanner);
                 break;
             case 3:
-                resultCourse = findCourseByAll(courseDAO, lectureDAO, studentDAO, teacherDAO, scanner);
+                resultCourse = findCourseByAll(courseDAO, scanner);
                 break;
             default:
                 System.out.println("Invalid option. Please try again. (Course)");
@@ -217,7 +232,7 @@ public class Main {
         return resultTeacher;
     }
 
-    private static CourseImpl findCourseById(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, Scanner scanner) {
+    private static CourseImpl findCourseById(CourseDAOSet courseDAO, Scanner scanner) {
         Collection<CourseImpl> results = courseDAO.findAll();
         System.out.println(results.size() + " results found: ");
         for (CourseImpl c : results)
@@ -229,7 +244,7 @@ public class Main {
         return courseDAO.findById(id);
     }
 
-    private static CourseImpl findCourseByName(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, Scanner scanner) {
+    private static CourseImpl findCourseByName(CourseDAOSet courseDAO, Scanner scanner) {
         System.out.println("Enter a name (or part of a name): ");
         String name = scanner.nextLine();
         Collection<CourseImpl> results = courseDAO.findByName(name);
@@ -243,7 +258,7 @@ public class Main {
         return courseDAO.findById(id);
     }
 
-    private static CourseImpl findCourseByAll(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, Scanner scanner) {
+    private static CourseImpl findCourseByAll(CourseDAOSet courseDAO, Scanner scanner) {
         Collection<CourseImpl> results = courseDAO.findAll();
         System.out.println(results.size() + " results found: ");
         for (CourseImpl c : results)
@@ -256,11 +271,10 @@ public class Main {
     }
 
     private static void handleSelectCommandCourse(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, CourseImpl course, Scanner scanner) {
-        boolean runHandler = true;
+        boolean running = true;
         int subChoice;
-        int subChoicePerson;
 
-        while (runHandler) {
+        while (running) {
             System.out.println(course.toString());
             displayCurrentSelections();
             displaySelectHandlerCommandsCourse();
@@ -277,12 +291,15 @@ public class Main {
                             askAssignPersonToCourse(courseDAO, studentDAO, teacherDAO, course, scanner);
                             break;
                         case 2:
-                            promptAssignLectureFromCourse(courseDAO, lectureDAO, course, scanner);
+                            promptAssignLectureToCourse(courseDAO, lectureDAO, course, scanner);
                             break;
                         default:
                             System.out.println("Invalid choice. Please try again.");
                             break;
                     }
+                    break;
+                case "e":
+                    editCourseInformation(courseDAO, course, scanner);
                     break;
                 case "u":
                     System.out.println("1) Person");
@@ -306,11 +323,10 @@ public class Main {
                     break;
                 case "v":
                     System.out.println("Information about this course: ");
-                    System.out.println(course.toString());
+                    System.out.println(course);
                     break;
                 case "q":
-                    System.out.println("DEBUG: Exiting handleSelectCommandCourse...");
-                    runHandler = false;
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid command. Please try again.");
@@ -390,9 +406,9 @@ public class Main {
     }
 
     private static void handleSelectCommandLecture(LectureDAOSet lectureDAO, TeacherDAOSet teacherDAO, LectureImpl lecture, Scanner scanner) {
-        boolean runHandler = true;
+        boolean running = true;
 
-        while (runHandler) {
+        while (running) {
             System.out.println(lecture.toString());
             displayCurrentSelections();
             displaySelectHandlerCommandsLecture();
@@ -403,6 +419,9 @@ public class Main {
                 case "a":
                     askAssignTeacherToLecture(lectureDAO, teacherDAO, lecture, scanner);
                     break;
+                case "e":
+                    editLectureInformation(lectureDAO, lecture, scanner);
+                    break;
                 case "u":
                     askUnassignTeacherFromLecture(lectureDAO, teacherDAO, lecture, scanner);
                     break;
@@ -411,10 +430,10 @@ public class Main {
                     break;
                 case "v":
                     System.out.println("Information about this lecture: ");
-                    System.out.println(lecture.toString());
+                    System.out.println(lecture);
                     break;
                 case "q":
-                    runHandler = false;
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid command. Please try again.");
@@ -423,11 +442,136 @@ public class Main {
         }
     }
 
-    private static void promptAssignLectureFromCourse(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, CourseImpl course, Scanner scanner) {
-        Collection<LectureImpl> lectureList = course.getLectures();
+    private static void editPersonalInformation(StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, AbstractPerson person, Scanner scanner) {
+        while (true) {
+            System.out.println("Edit... (or 0 to save and exit)");
+            System.out.printf("1) Name - %s\n", person.getName());
+            System.out.printf("2) E-mail address - %s\n", person.getEmail());
+            System.out.printf("3) Address - %s\n", person.getAddress());
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new name: ");
+                    String newName = scanner.nextLine();
+                    if (newName.isEmpty()) {
+                        System.out.println("Value can't be empty.");
+                        break;
+                    }
+                    person.setName(newName);
+                    break;
+                case 2:
+                    System.out.print("Enter new e-mail address: ");
+                    String newEmail = scanner.nextLine();
+                    if (newEmail.isEmpty()) {
+                        System.out.println("Value can't be empty.");
+                        break;
+                    }
+                    person.setEmail(newEmail);
+                    break;
+                case 3:
+                    System.out.println("Enter new address: ");
+                    String newAddress = scanner.nextLine();
+                    if (newAddress.isEmpty()) {
+                        System.out.println("Value can't be empty.");
+                        break;
+                    }
+                    person.setAddress(newAddress);
+                    break;
+                case 0:
+                    if (person.getRole() == Role.TEACHER)
+                        teacherDAO.saveTeacher((TeacherImpl) person);
+                    else
+                        studentDAO.saveStudent((StudentImpl) person);
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void editCourseInformation(CourseDAOSet courseDAO, CourseImpl course, Scanner scanner) {
+        while (true) {
+            System.out.println("Edit... (or 0 to save and exit)");
+            System.out.printf("1) Course name - %s\n", course.getCourseName());
+            System.out.printf("2) Starting date - %s\n", course.getStartDate());
+            System.out.printf("3) Week duration - %s weeks\n", course.getWeekDuration());
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new course name: ");
+                    String newName = scanner.nextLine();
+                    if (newName.isEmpty()) {
+                        System.out.println("Value can't be empty.");
+                        break;
+                    }
+                    course.setCourseName(newName);
+                    break;
+                case 2:
+                    System.out.print("Enter new course starting date: ");
+                    LocalDate newDate = LocalDate.parse(scanner.nextLine());
+                    course.setStartDate(newDate);
+                    break;
+                case 3:
+                    System.out.println("Enter new week duration: ");
+                    int newDuration = scanner.nextInt();
+                    scanner.nextLine();
+                    if (newDuration < 0) {
+                        System.out.println("Value can't be negative.");
+                        break;
+                    }
+                    course.setWeekDuration(newDuration);
+                    break;
+                case 0:
+                    courseDAO.saveCourse(course);
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void editLectureInformation(LectureDAO lectureDAO, LectureImpl lecture, Scanner scanner) {
+        while (true) {
+            System.out.println("Edit... (or 0 to save and exit)");
+            System.out.printf("1) Lecture name - %s\n", lecture.getLectureName());
+            System.out.printf("2) Lecture date - %s\n", lecture.getDate());
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new lecture name: ");
+                    String newName = scanner.nextLine();
+                    if (newName.isEmpty()) {
+                        System.out.println("Value can't be empty.");
+                        break;
+                    }
+                    lecture.setLectureName(newName);
+                    break;
+                case 2:
+                    System.out.print("Enter new lecture date: ");
+                    LocalDate newDate = LocalDate.parse(scanner.nextLine());
+                    lecture.setDate(newDate);
+                    break;
+                case 0:
+                    lectureDAO.saveLecture(lecture);
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void promptAssignLectureToCourse(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, CourseImpl course, Scanner scanner) {
         System.out.println("Enter lecture IDs separated by commas: ");
         String[] lectureIds = scanner.nextLine().split(",");
-        scanner.nextLine();
 
         for (String id : lectureIds) {
             LectureImpl lecture = lectureDAO.findById(Integer.parseInt(id.trim()));
@@ -444,10 +588,8 @@ public class Main {
     }
 
     private static void promptUnassignLectureFromCourse(CourseDAOSet courseDAO, LectureDAOSet lectureDAO, CourseImpl course, Scanner scanner) {
-        Collection<LectureImpl> lectureList = course.getLectures();
         System.out.println("Enter lecture IDs separated by commas: ");
         String[] lectureIds = scanner.nextLine().split(",");
-        scanner.nextLine();
 
         for (String id : lectureIds) {
             LectureImpl lecture = lectureDAO.findById(Integer.parseInt(id.trim()));
@@ -494,7 +636,7 @@ public class Main {
                 studentList.add(student);
             }
         }
-        unassignStudentsFromCourse(courseDAO, studentDAO, course, studentList, scanner);
+        unassignStudentsFromCourse(courseDAO, studentDAO, course, studentList);
     }
 
     private static void askAssignPersonToCourse(CourseDAOSet courseDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, CourseImpl course, Scanner scanner) {
@@ -530,14 +672,14 @@ public class Main {
             System.out.println("This course has no assigned supervisor.");
     }
 
-    private static void unassignStudentsFromCourse(CourseDAOSet courseDAO, StudentDAOSet studentDAO, CourseImpl course, Collection<StudentImpl> students, Scanner scanner) {
+    private static void unassignStudentsFromCourse(CourseDAOSet courseDAO, StudentDAOSet studentDAO, CourseImpl course, Collection<StudentImpl> students) {
         for (StudentImpl student : students) {
             if (course.getStudents().contains(student) && student.getCourses().contains(course)) {
-                    course.unregisterStudent(student);
-                    student.unregisterCourse(course);
+                course.unregisterStudent(student);
+                student.unregisterCourse(course);
 
-                    courseDAO.saveCourse(course);
-                    studentDAO.saveStudent(student);
+                courseDAO.saveCourse(course);
+                studentDAO.saveStudent(student);
             }
         }
     }
@@ -645,8 +787,7 @@ public class Main {
         System.out.println("1) Register new person");
         System.out.println("2) Create course");
         System.out.println("3) Create lecture");
-        System.out.println("4) Assign person to...");
-        System.out.println("5) Find person, course or lecture by...");
+        System.out.println("4) Find person, course or lecture by...");
         System.out.println("0) Exit");
     }
 
@@ -685,7 +826,7 @@ public class Main {
     }
 
     private static boolean askAssignTeacherToLecture(LectureDAOSet lectureDAO, TeacherDAOSet teacherDAO, LectureImpl lecture, Scanner scanner) {
-        TeacherImpl teacher = null;
+        TeacherImpl teacher;
         System.out.println("Assign teacher(s) to lecture? Y/N");
 
         if (scanner.nextLine().equalsIgnoreCase("n")) {
@@ -712,12 +853,12 @@ public class Main {
         return true;
     }
 
-    private static boolean askUnassignTeacherFromLecture(LectureDAOSet lectureDAO, TeacherDAOSet teacherDAO, LectureImpl lecture, Scanner scanner) {
-        TeacherImpl teacher = null;
+    private static void askUnassignTeacherFromLecture(LectureDAOSet lectureDAO, TeacherDAOSet teacherDAO, LectureImpl lecture, Scanner scanner) {
+        TeacherImpl teacher;
         System.out.println("Unassign teacher(s) from lecture? Y/N");
 
         if (scanner.nextLine().equalsIgnoreCase("n")) {
-            return false;
+            return;
         }
 
         if (!selector.getSelections().isEmpty() && selector.getSelectorRole() == Role.TEACHER)
@@ -737,11 +878,10 @@ public class Main {
             }
         }
 
-        return true;
     }
 
     private static boolean askAssignTeacherToCourse(CourseDAOSet courseDAO, TeacherDAOSet teacherDAO, CourseImpl course, Scanner scanner) {
-        TeacherImpl teacher = null;
+        TeacherImpl teacher;
         System.out.println("Assign teacher to course? Y/N");
 
         if (scanner.nextLine().equalsIgnoreCase("n")) {
@@ -767,12 +907,12 @@ public class Main {
         return true;
     }
 
-    private static boolean askAssignStudentToCourse(CourseDAOSet courseDAO, StudentDAOSet studentDAO, CourseImpl course, Scanner scanner) {
-        StudentImpl student = null;
+    private static void askAssignStudentToCourse(CourseDAOSet courseDAO, StudentDAOSet studentDAO, CourseImpl course, Scanner scanner) {
+        StudentImpl student;
         System.out.println("Assign student(s) to course? Y/N");
 
         if (scanner.nextLine().equalsIgnoreCase("n")) {
-            return false;
+            return;
         }
 
         if (!selector.getSelections().isEmpty() && selector.getSelectorRole() == Role.STUDENT) {
@@ -786,7 +926,7 @@ public class Main {
                 }
 
                 courseDAO.saveCourse(course);
-                return true;
+                return;
             }
         }
 
@@ -809,7 +949,6 @@ public class Main {
         }
 
         courseDAO.saveCourse(course);
-        return true;
     }
 
     private static void displayCurrentSelections() {
@@ -827,29 +966,26 @@ public class Main {
         else
             System.out.println("a) Add person to selection      c) Clear selections        d) Delete selection");
 
-        System.out.println("e) Edit personal information        ) Show selections      v) View information\n");
+        System.out.println("e) Edit personal information        s) Show selections      v) View information\n");
     }
 
     private static void displaySelectHandlerCommandsCourse() {
-        if (!selector.getSelections().isEmpty() && selector.getSelectorRole() == Role.TEACHER)
-            System.out.printf("a) Assign ... to course      u) Unassign ... from course\n",
-                    selector.getSelections().size(), selector.getSelectorRole());
+        System.out.println("a) Assign ... to course      s) Show selections      u) Unassign ... from course");
 
-        System.out.println("e) Edit course information      ) Show selections      v) View information\n");
+        System.out.println("e) Edit course information      v) View information\n");
     }
 
     private static void displaySelectHandlerCommandsLecture() {
-        if (!selector.getSelections().isEmpty() && selector.getSelectorRole() == Role.TEACHER)
-            System.out.printf("a) Assign teachers to lecture      u) Unassign teachers from lecture\n",
-                    selector.getSelections().size(), selector.getSelectorRole());
+        System.out.println("a) Assign teachers to lecture      s) Show selections      u) Unassign teachers from lecture");
 
-        System.out.println("e) Edit lecture information        ) Show selections      v) View information\n");
+        System.out.println("e) Edit lecture information        v) View information\n");
     }
 
-    private static void handleSelectCommand(AbstractPerson person, Scanner scanner) {
-        boolean runHandler = true;
+    private static void handleSelectCommand(StudentDAOSet studentDAO, TeacherDAOSet teacherDAO, AbstractPerson person, Scanner scanner) {
+        boolean running = true;
 
-        while (runHandler) {
+        while (running) {
+            System.out.println(person);
             displayCurrentSelections();
             displaySelectHandlerCommands();
             System.out.println("Enter command (or q to return to main menu): ");
@@ -865,6 +1001,8 @@ public class Main {
                 case "d":
                     selector.removeSelection(person);
                     break;
+                case "e":
+                    editPersonalInformation(studentDAO, teacherDAO, person, scanner);
                 case "s":
                     System.out.println(selector.toString());
                     break;
@@ -873,7 +1011,7 @@ public class Main {
                     System.out.println(person.toString());
                     break;
                 case "q":
-                    runHandler = false;
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid command. Please try again.");
