@@ -1,0 +1,18 @@
+[
+  {
+    "lectureName": "Java Fundamentals",
+    "date": "2023-10-15"
+  },
+  {
+    "lectureName": "Advanced Java Programming",
+    "date": "2023-10-22"
+  },
+  {
+    "lectureName": "Python Syntax and Semantics",
+    "date": "2023-10-30"
+  },
+  {
+    "lectureName": "Introduction to Databases with Python",
+    "date": "2023-11-06"
+  }
+]

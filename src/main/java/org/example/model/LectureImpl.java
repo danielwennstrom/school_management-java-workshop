@@ -1,5 +1,7 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.data_access.impl.LectureDAOSet;
 import org.example.interfaces.Lecture;
 import org.example.sequencers.LectureIdSequencer;
@@ -12,11 +14,14 @@ public class LectureImpl implements Lecture {
     private int id;
     private String lectureName;
     private LocalDate date;
+    private CourseImpl course;
     private List<TeacherImpl> teachers;
 
-    public LectureImpl(String lectureName) {
+    @JsonCreator
+    public LectureImpl(@JsonProperty("lectureName") String lectureName, @JsonProperty("date") LocalDate date) {
         this.id = LectureIdSequencer.getInstance().nextId();
         this.lectureName = lectureName;
+        this.date = date;
         this.teachers = new ArrayList<>();
     }
 
@@ -36,6 +41,21 @@ public class LectureImpl implements Lecture {
             this.teachers.remove(teacher);
             return this;
         }
+
+        return null;
+    }
+
+    @Override
+    public CourseImpl registerCourse(CourseImpl course) {
+        if (course != null)
+            this.course = course;
+
+        return course;
+    }
+
+    @Override
+    public CourseImpl unregisterCourse() {
+        this.course = null;
 
         return null;
     }

@@ -2,7 +2,6 @@ package org.example.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.example.data_access.impl.CourseDAOSet;
 import org.example.interfaces.Course;
 import org.example.sequencers.CourseIdSequencer;
 
@@ -163,6 +162,24 @@ public class CourseImpl implements Course {
             sb.append(supervisor.getName());
         } else
             sb.append("none");
+
+        sb.append("\n").append("Lectures: ").append("\n");
+
+        for (int i = 0; i < lectures.size(); i += 2) {
+            LectureImpl lecture1 = lectures.get(i);
+            LectureImpl lecture2 = null;
+
+            if (i + 1 < lectures.size()) {
+                lecture2 = lectures.get(i + 1);
+            }
+
+            sb.append(lecture1.shortToString()).append("   ");
+            if (lecture2 != null) {
+                sb.append(lecture2.shortToString());
+            }
+
+            sb.append("\n");
+        }
 
         return sb.toString();
     }
