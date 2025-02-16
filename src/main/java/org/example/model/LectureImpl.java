@@ -22,10 +22,12 @@ public class LectureImpl implements Lecture {
 
     @Override
     public LectureImpl registerTeacher(TeacherImpl teacher) {
-        this.teachers.add(teacher);
-        LectureDAOSet.getInstance().saveLecture(this);
+        if (!teachers.contains(teacher)) {
+            this.teachers.add(teacher);
+            return this;
+        }
 
-        return this;
+        return null;
     }
 
     public int getId() {

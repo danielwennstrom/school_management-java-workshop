@@ -36,26 +36,31 @@ public class CourseImpl implements Course {
     @Override
     public CourseImpl registerTeacher(TeacherImpl teacher) {
         this.supervisor = teacher;
-        CourseDAOSet.getInstance().saveCourse(this);
 
         return this;
     }
 
     @Override
     public CourseImpl registerStudent(StudentImpl student) {
-        this.students.add(student);
-        student.registerCourse(this);
-        CourseDAOSet.getInstance().saveCourse(this);
+        if (!students.contains(student)) {
+            this.students.add(student);
+            student.registerCourse(this);
 
-        return this;
+            return this;
+        }
+
+        return null;
     }
 
     @Override
     public CourseImpl registerLecture(LectureImpl lecture) {
-        this.lectures.add(lecture);
-        CourseDAOSet.getInstance().saveCourse(this);
+        if (!lectures.contains(lecture)) {
+            this.lectures.add(lecture);
 
-        return this;
+            return this;
+        }
+
+        return null;
     }
 
     public int getId() {

@@ -20,7 +20,6 @@ public class StudentImpl extends AbstractPerson {
     public StudentImpl registerCourse(CourseImpl course) {
         if (!courses.contains(course)) {
             courses.add(course);
-            CourseDAOSet.getInstance().saveCourse(course);
             return this;
         }
 
