@@ -26,6 +26,15 @@ public class StudentImpl extends AbstractPerson {
         return null;
     }
 
+    public StudentImpl unregisterCourse(CourseImpl course) {
+        if (courses.contains(course)) {
+            courses.remove(course);
+            return this;
+        }
+
+        return null;
+    }
+
     public List<CourseImpl> getCourses() {
         return courses;
     }

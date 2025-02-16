@@ -30,6 +30,16 @@ public class LectureImpl implements Lecture {
         return null;
     }
 
+    @Override
+    public LectureImpl unregisterTeacher(TeacherImpl teacher) {
+        if (teachers.contains(teacher)) {
+            this.teachers.remove(teacher);
+            return this;
+        }
+
+        return null;
+    }
+
     public int getId() {
         return id;
     }

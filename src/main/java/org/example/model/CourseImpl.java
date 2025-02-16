@@ -41,6 +41,13 @@ public class CourseImpl implements Course {
     }
 
     @Override
+    public CourseImpl unregisterTeacher() {
+        this.supervisor = null;
+
+        return this;
+    }
+
+    @Override
     public CourseImpl registerStudent(StudentImpl student) {
         if (!students.contains(student)) {
             this.students.add(student);
@@ -53,9 +60,32 @@ public class CourseImpl implements Course {
     }
 
     @Override
+    public CourseImpl unregisterStudent(StudentImpl student) {
+        if (students.contains(student)) {
+            this.students.remove(student);
+            student.unregisterCourse(this);
+
+            return this;
+        }
+
+        return null;
+    }
+
+    @Override
     public CourseImpl registerLecture(LectureImpl lecture) {
         if (!lectures.contains(lecture)) {
             this.lectures.add(lecture);
+
+            return this;
+        }
+
+        return null;
+    }
+
+    @Override
+    public CourseImpl unregisterLecture(LectureImpl lecture) {
+        if (lectures.contains(lecture)) {
+            this.lectures.remove(lecture);
 
             return this;
         }
