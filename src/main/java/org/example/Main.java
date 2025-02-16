@@ -162,7 +162,7 @@ public class Main {
         }
     }
 
-    private static void FindCourseById(CourseDAOSet courseDAO, Scanner scanner, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO) {
+    private static void findCourseById(CourseDAOSet courseDAO, Scanner scanner, LectureDAOSet lectureDAO, StudentDAOSet studentDAO, TeacherDAOSet teacherDAO) {
         Collection<CourseImpl> results = courseDAO.findAll();
         System.out.println(results.size() + " results found: ");
         for (CourseImpl c : results)
